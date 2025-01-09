@@ -1,0 +1,5 @@
+- State Rules
+- Make turns
+- Play Game
+- Use known algortihms (tree search etc.)
+- Fortify with neural networks
