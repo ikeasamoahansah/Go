@@ -79,7 +79,17 @@ class Board:
             else:
                 if neighbor_string not in adjacent_opposite_color:
                     adjacent_opposite_color.append(neighbor_string)
-        new_sring = GoString(player, [point], liberties)
+        new_string = GoString(player, [point], liberties)
+
+        for same_color_string in adjacent_same_color:
+            new_string = new_string.merged_with(same_color_string)
+        for new_string_point in new_string.stones: 
+            self._grid[new_string_point] = new_string
+        for other_color_string in adjacent_opposite_color:
+            other_color_string.remove_libery(point) 
+        for other_color_string in adjacent_opposite_color:
+            if other_color_string.num_liberties == 0:
+                self._remove_string(other_color_string)
 
     def is_on_grid(self, point):
         return 1 <= point.row <= self.num_rows and \
@@ -96,3 +106,21 @@ class Board:
         if string is None:
             return None
         return string
+
+    def _remove_string(self, string):
+        for point in string.stones:
+            for neighbor in point.neighbors():
+                neighbor_string = self._grid.get(neighbor)
+                if neighbor_string is None:
+                    continue
+                if neighbor_string is not string:
+                    neighbor_string.add_liberty(point)
+            self._grid[point] = None
+
+
+class GameState:
+    def __init__(self, board, next_player, previous, move):
+        pass
+
+
+
