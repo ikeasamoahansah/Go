@@ -2,7 +2,7 @@ import copy
 from .gotypes import Point, Player
 
 
-class Move:
+class Move():
     def __init__(self, point=None, is_pass=False, is_resign=False):
         assert (point is not None) ^ is_pass ^ is_resign
         self.point = point
@@ -23,7 +23,7 @@ class Move:
         return Move(is_resign=True)
 
 
-class GoString:
+class GoString():
     def __init__(self, color, stones, liberties):
         self.color = color
         self.stones = stones
@@ -54,7 +54,7 @@ class GoString:
             self.stones == other.stones and \
             self.liberties == other.liberties
 
-class Board:
+class Board():
     def __init__(self, num_rows, num_cols):
         self.num_rows = num_rows
         self.num_cols = num_cols
@@ -118,7 +118,7 @@ class Board:
             self._grid[point] = None
 
 
-class GameState:
+class GameState():
     def __init__(self, board, next_player, previous, move):
         self.board = board
         self.next_player = next_player
