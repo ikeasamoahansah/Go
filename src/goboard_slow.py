@@ -1,5 +1,5 @@
 import copy
-from .gotypes import Point, Player
+from gotypes import Point, Player
 
 
 class Move():
@@ -86,7 +86,7 @@ class Board():
         for new_string_point in new_string.stones: 
             self._grid[new_string_point] = new_string
         for other_color_string in adjacent_opposite_color:
-            other_color_string.remove_libery(point) 
+            other_color_string.remove_liberty(point) 
         for other_color_string in adjacent_opposite_color:
             if other_color_string.num_liberties == 0:
                 self._remove_string(other_color_string)
@@ -127,9 +127,9 @@ class GameState():
 
     
     def apply_move(self, move):
-        if move.is_play:
+        if move.play:
             next_board = copy.deepcopy(self.board)
-            next_board.place_stone(self.next_player, move_point)
+            next_board.place_stone(self.next_player, move.point)
         else:
             next_board = self.board
         return GameState(next_board, self.next_player.other, self, move)
@@ -152,7 +152,7 @@ class GameState():
         return self.last_move.is_pass and second_last_move.is_pass
 
     def is_move_self_capture(self, player, move):
-        if not move.is_play:
+        if not move.play:
             return False
         next_board = copy.deepcopy(self.board)
         next_board.place_stone(player, move.point)
@@ -164,14 +164,14 @@ class GameState():
         return (self.next_player, self.board)
 
     def does_move_violate_ko(self, player, move):
-        if not move.is_play:
+        if not move.play:
             return False
         next_board = copy.deepcopy(self.board)
         next_board.place_stone(player, move.point)
         next_situation = (player.other, next_board)
         past_state = self.previous_state
         while past_state is not None:
-            if past_state.situaton == next_situation:
+            if past_state.situation == next_situation:
                 return True
             past_state = past_state.previous_state
         return False
