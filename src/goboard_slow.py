@@ -26,8 +26,8 @@ class Move():
 class GoString():
     def __init__(self, color, stones, liberties):
         self.color = color
-        self.stones = stones
-        self.liberties = liberties
+        self.stones = set(stones)
+        self.liberties = set(liberties)
 
 
     def remove_liberty(self, point):
