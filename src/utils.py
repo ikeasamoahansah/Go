@@ -9,6 +9,11 @@ STONE_TO_CHAR = {
 }
 
 
+def point_from_coords(coords):
+    col = COLS.index(coords[0]) + 1
+    row = int(coords[1:])
+    return gotypes.Point(row=row, col=col)
+
 def print_move(player, move):
     if move.is_pass:
         move_str = 'passes'
