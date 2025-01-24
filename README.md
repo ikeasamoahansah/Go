@@ -1,5 +1,5 @@
-- State Rules
-- Make turns
-- Play Game
+- State Rules [x]
+- Make turns [x]
+- Play Game [x]
 - Use known algortihms (tree search etc.)
 - Fortify with neural networks
