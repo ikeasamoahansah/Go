@@ -1,5 +1,7 @@
 from gotypes import Point, Player
 
+#on pause
+
 __all__ = ['HASH_CODE', 'EMPTY_BOARD']
 
 HASH_CODE = {
