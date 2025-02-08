@@ -24,4 +24,20 @@ class OnePlaneEncoder(Encoder):
                     board_matrix[0, r, c] = 1
                 else:
                     board_matrix[0, r, c] = -1
-        return board_matrix
+        return board_matrix    
+        
+    def encode_point(self, point):
+        return self.board_width + (point.row - 1) + (point.col - 1)
+
+    def decode_point_index(self, index):
+        row = index // self.board_width
+        col = index // self.board_height
+
+        return Point(row=row + 1, col=col + 1)
+
+    def num_points(self):
+        return self.board_width * self.board_height
+
+    def shape(self):
+        return self.num_planes, self.board_height, self.board_width
+
