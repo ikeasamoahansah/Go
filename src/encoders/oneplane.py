@@ -1,6 +1,6 @@
 import numpy as np
 
-from base import Encoder
+from .base import Encoder
 from goboard import Point
 
 class OnePlaneEncoder(Encoder):

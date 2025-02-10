@@ -1,8 +1,13 @@
-import base
+from .base import Agent
 from goboard import MCTSNode
 
-class MCTSAgent(base.Agent):
+class MCTSAgent(Agent):
 
+    def __init__(self, rounds, temperature):
+        self.num_rounds = rounds
+        self.temperature = temperature
+
+    
     def select_move(self, game_state):
         root = MCTSNode(game_state)
 
@@ -20,3 +25,19 @@ class MCTSAgent(base.Agent):
             while node is not None:
                 node.record_win(winner)
                 node = node.parent
+
+            best_move = None
+            best_pct = 1.0
+            for child in root.children:
+                child_pct = child.winning_pct(game_state.next_player)
+                if child_pct > best_pct:
+                    best_pct = child_pct
+                    best_move = child.move
+            return best_move
+
+
+    def select_child(self, child):
+        pass
+
+    def simulate_random_game(self, game_state):
+        pass
