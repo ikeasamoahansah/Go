@@ -36,7 +36,7 @@ class MCTSAgent(Agent):
             return best_move
 
 
-    def select_child(self, child):
+    def select_child(self, node):
         pass
 
     def simulate_random_game(self, game_state):
