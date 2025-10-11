@@ -1,11 +1,17 @@
 import copy
 import zobrist
 from gotypes import Point, Player
+from scoring import compute_game_result
+
+class IllegalMoveError(Exception):
+    pass
+
 
 class Move():
     def __init__(self, point=None, is_pass=False, is_resign=False):
         assert (point is not None) ^ is_pass ^ is_resign
         self.point = point
+        self.is_play = (self.point is not None)
         self.is_pass = is_pass
         self.is_resign = is_resign
 
@@ -21,6 +27,13 @@ class Move():
     @classmethod
     def resign(cls):
         return Move(is_resign=True)
+
+    def __str__(self):
+        if self.is_pass:
+            return 'pass'
+        if self.is_resign:
+            return 'resign'
+        return '(r %d, c %d)' % (self.point.row, self.point.col)
 
 
 class GoString():
@@ -56,6 +69,11 @@ class GoString():
             self.stones == other.stones and \
             self.liberties == other.liberties
 
+    def __deepcopy__(self, memodict={}):
+        return GoString(self.color, self.stones,
+                        copy.deepcopy(self.liberties))
+
+
 class Board():
     def __init__(self, num_rows, num_cols):
         self.num_rows = num_rows
@@ -66,6 +84,8 @@ class Board():
     
     def place_stone(self, player, point):
         assert self.is_on_grid(point)
+        if self._grid.get(point) is not None:
+            print('Illegal play on %s' % str(point))
         assert self._grid.get(point) is None
         adjacent_same_color = []
         adjacent_opposite_color = []
@@ -129,6 +149,20 @@ class Board():
             self._grid[point] = None
 
             self._hash ^= zobrist.HASH_CODE[point, string.color]
+
+    def __eq__(self, other):
+        return isinstance(other, Board) and \
+            self.num_rows == other.num_rows and \
+            self.num_cols == other.num_cols and \
+            self._hash() == other._hash()
+
+    def __deepcopy__(self, memodict={}):
+        copied = Board(self.num_rows, self.num_cols)
+        # Can do a shallow copy b/c the dictionary maps tuples
+        # (immutable) to GoStrings (also immutable)
+        copied._grid = copy.copy(self._grid)
+        copied._hash = self._hash
+        return copied
     
     def zobrist_hash(self):
         return self._hash
@@ -159,8 +193,8 @@ class GameState():
     def new_game(cls, board_size):
         if isinstance(board_size, int):
             board_size = [board_size, board_size]
-            board = Board(*board_size)
-            return GameState(board, Player.black, None, None)
+        board = Board(*board_size)
+        return GameState(board, Player.black, None, None)
 
     def is_over(self):
         if self.last_move is None:
@@ -171,6 +205,27 @@ class GameState():
         if second_last_move is None:
             return False
         return self.last_move.is_pass and second_last_move.is_pass
+
+    def legal_moves(self):
+        moves = []
+        for row in range(1, self.board.num_rows + 1):
+            for col in range(1, self.board.num_cols + 1):
+                move = Move.play(Point(row, col))
+                if self.is_valid_move(move):
+                    moves.append(move)
+        # These two moves are always legal.
+        moves.append(Move.pass_turn())
+        moves.append(Move.resign())
+
+        return moves
+
+    def winner(self):
+        if not self.is_over():
+            return None
+        if self.last_move.is_resign:
+            return self.next_player
+        game_result = compute_game_result(self)
+        return game_result.winner
 
     def is_move_self_capture(self, player, move):
         if not move.play:
