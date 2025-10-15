@@ -12,7 +12,7 @@ from keras.utils import to_categorical
 # end::base_imports[]
 
 # tag::dlgo_imports[]
-from dlgo.gosgf import sgf
+from dlgo.gosgf import Sgf_game
 from dlgo.goboard_fast import Board, GameState, Move
 from dlgo.gotypes import Player, Point
 from dlgo.encoders.base import get_encoder_by_name
@@ -99,7 +99,7 @@ class GoDataProcessor:
             if not name.endswith('.sgf'):
                 raise ValueError(name + ' is not a valid sgf')
             sgf_content = zip_file.extractfile(name).read()
-            sgf = sgf.from_string(sgf_content)  # <3>
+            sgf = Sgf_game.from_string(sgf_content)  # <3>
 
             game_state, first_move_done = self.get_handicap(sgf)  # <4>
 
@@ -203,7 +203,7 @@ class GoDataProcessor:
             name = name_list[index + 1]
             if name.endswith('.sgf'):
                 sgf_content = zip_file.extractfile(name).read()
-                sgf = sgf.from_string(sgf_content)
+                sgf = Sgf_game.from_string(sgf_content)
                 game_state, first_move_done = self.get_handicap(sgf)
 
                 num_moves = 0
