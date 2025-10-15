@@ -1,7 +1,7 @@
 import copy
-import zobrist
-from gotypes import Point, Player
-from scoring import compute_game_result
+from dlgo import zobrist
+from dlgo.gotypes import Point, Player
+from dlgo.scoring import compute_game_result
 
 class IllegalMoveError(Exception):
     pass

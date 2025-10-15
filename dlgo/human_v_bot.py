@@ -1,6 +1,6 @@
-from agent import naive
-import goboard
-import gotypes
+from dlgo.agent import naive
+from dlgo import goboard
+from dlgo import gotypes
 from utils import print_board, print_move, point_from_coords
 
 

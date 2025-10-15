@@ -2,9 +2,9 @@ import argparse
 import numpy as np
 
 from encoders.base import get_encoder_by_name
-import goboard
-from agent import mcts
-from utils import print_board, print_move
+from dlgo import goboard
+from dlgo.agent import mcts
+from dlgo.utils import print_board, print_move
 
 
 def generate_game(board_size, rounds, max_moves, temperature):

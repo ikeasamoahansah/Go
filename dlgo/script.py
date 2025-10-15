@@ -1,6 +1,6 @@
 import random
 
-from gotypes import Player, Point
+from dlgo.gotypes import Player, Point
 
 def to_python(player_state):
     if player_state == None:

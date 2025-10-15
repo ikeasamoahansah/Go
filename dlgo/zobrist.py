@@ -1,4 +1,4 @@
-from gotypes import Point, Player
+from dlgo.gotypes import Point, Player
 
 #on pause
 

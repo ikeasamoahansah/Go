@@ -1,5 +1,5 @@
 import copy
-from gotypes import Point, Player
+from dlgo.gotypes import Point, Player
 
 
 class Move():
