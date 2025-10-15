@@ -31,7 +31,7 @@ class OnePlaneEncoder(Encoder):
 
     def decode_point_index(self, index):
         row = index // self.board_width
-        col = index // self.board_height
+        col = index % self.board_width
 
         return Point(row=row + 1, col=col + 1)
 
